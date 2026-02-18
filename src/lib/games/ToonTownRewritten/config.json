@@ -1,0 +1,8 @@
+{
+  "install_dir": "/tmp/ttr_install",
+  "cache_dir": "/root/.config/shticker_book_unwritten/cache",
+  "manifest_uri": "https://cdn.toontownrewritten.com/content/patchmanifest.txt",
+  "cdn_uri": "https://download.toontownrewritten.com/patches/",
+  "store_passwords": true,
+  "accounts": {}
+}
