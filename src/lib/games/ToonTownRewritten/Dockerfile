@@ -29,10 +29,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     x11vnc \
     openbox \
     x11-utils \
+    jq \
 && rm -rf /var/lib/apt/lists/*
 
 # allow build-time override of the VNC password (default: "secret")
 ARG VNC_PASSWORD=secret
+
+# sillyzone's root url
+ARG SILLYZONE_ROOT_URL=http://192.168.1.241:5173
 
 # create VNC password file
 RUN mkdir -p /root/.vnc && \
@@ -59,7 +63,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # cosmetic crap
 COPY openbox_config.sh /root/.config/openbox/autostart
 
-
+# set the Sillyzone root URL as an environment variable
+ENV SILLYZONE_ROOT_URL=${SILLYZONE_ROOT_URL}
 
 CMD ["/usr/bin/supervisord"]
 
