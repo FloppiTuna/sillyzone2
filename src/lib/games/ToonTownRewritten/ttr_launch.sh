@@ -15,6 +15,16 @@ response=$(curl -s ${SILLYZONE_ROOT_URL}/api/games/credentials)
 TOONTOWN_USERNAME=$(echo $response | jq -r '.game_credentials.ttr.username')
 TOONTOWN_PASSWORD=$(echo $response | jq -r '.game_credentials.ttr.password')
 
+# if either is empty then we should ask the user to input them
+if [ -z "$TOONTOWN_USERNAME" ] || [ -z "$TOONTOWN_PASSWORD" ]; then
+  echo "Failed to load ToonTown credentials from Sillyzone. You may enter them now, but they will not be saved."
+  echo "Go to [File -> Manage Game Credentials] in the Jellybean launcher to save your credentials."
+  read -p "Username: " TOONTOWN_USERNAME
+  read -s -p "Password: " TOONTOWN_PASSWORD
+  echo ""
+fi
+
+
 echo "Username: $TOONTOWN_USERNAME"
 echo "Password: $(echo $TOONTOWN_PASSWORD | sed 's/./*/g')"
 echo ""
