@@ -28,7 +28,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxcursor-dev \
     libxi-dev \
     libasound2-dev \
-    openbox \
     jq \
     pulseaudio \
     pulseaudio-utils \
@@ -55,10 +54,6 @@ RUN chmod +x /launcher/startup.sh
 # create non-root user for running xpra and pulseaudio
 RUN useradd -m -s /bin/bash sillyuser && \
     echo "sillyuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# setup openbox config for sillyuser
-RUN mkdir -p /home/sillyuser/.config/openbox
-COPY openbox_config.sh /home/sillyuser/.config/openbox/autostart
 
 # change ownership of launcher directory to sillyuser
 RUN chown -R sillyuser:sillyuser /launcher /home/sillyuser

@@ -3,10 +3,8 @@
 echo "=== sillyzone2 ~ ToonTown Rewritten Launcher ==="
 echo "You are: $SILLYZONE_USERNAME"
 echo ""
-echo "NOTE: This script will attempt to automatically load your account credentials from Sillyzone."
-echo "Make sure you put your credentials in the Jellybean launcher on Sillyzone, and that they are valid."
 
-echo "Fetching credentials from Sillyzone..."
+echo "Loading your credentials from Sillyzone, please wait..."
 sleep 1
 
 # fetch credentials from the API route and parse the JSON to get the username and password
@@ -17,7 +15,7 @@ TOONTOWN_PASSWORD=$(echo $response | jq -r '.game_credentials.ttr.password')
 
 # if either is empty then we should ask the user to input them
 if [ -z "$TOONTOWN_USERNAME" ] || [ -z "$TOONTOWN_PASSWORD" ]; then
-  echo "Failed to load ToonTown credentials from Sillyzone. You may enter them now, but they will not be saved."
+  echo "Failed to load ToonTown credentials from Sillyzone! You may enter them now, but they will not be saved."
   echo "Go to [File -> Manage Game Credentials] in the Jellybean launcher to save your credentials."
   read -p "Username: " TOONTOWN_USERNAME
   read -s -p "Password: " TOONTOWN_PASSWORD
@@ -36,9 +34,9 @@ jq --arg user "$TOONTOWN_USERNAME" --arg pass "$TOONTOWN_PASSWORD" \
   /launcher/config.json > /launcher/config.json.tmp && \
   mv /launcher/config.json.tmp /launcher/config.json
 
-echo "Loaded credentials!"
+echo "Loaded credentials into the launcher."
 
-echo -e "\033[5mDownloading and running ToonTown Rewritten...\033[0m"
+echo -e "\033[5mLaunching ToonTown Rewritten...\033[0m"
 sleep 2
 
 # pipe the password into the input when it asks for "Password for" and then run the launcher with the username and password
