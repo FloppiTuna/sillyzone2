@@ -2,11 +2,15 @@ FROM ubuntu:25.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# sillyzone's root url
+ARG SILLYZONE_ROOT_URL=http://192.168.1.241:5173
+ENV SILLYZONE_ROOT_URL=${SILLYZONE_ROOT_URL}
+
 # install deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    wmctrl \
+    sudo \
     xterm \
-    supervisor \
-    xvfb \
     build-essential \
     curl \
     wget \
@@ -24,23 +28,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxcursor-dev \
     libxi-dev \
     libasound2-dev \
-    x11-xserver-utils \
-    xvfb \
-    x11vnc \
     openbox \
-    x11-utils \
     jq \
+    pulseaudio \
+    pulseaudio-utils \
 && rm -rf /var/lib/apt/lists/*
 
-# allow build-time override of the VNC password (default: "secret")
-ARG VNC_PASSWORD=secret
-
-# sillyzone's root url
-ARG SILLYZONE_ROOT_URL=http://192.168.1.241:5173
-
-# create VNC password file
-RUN mkdir -p /root/.vnc && \
-    x11vnc -storepasswd "$VNC_PASSWORD" /root/.vnc/passwd
+# install xpra
+RUN curl https://xpra.org/get-xpra.sh | bash
 
 # install rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -51,22 +46,19 @@ RUN git clone https://github.com/JonathanHelianthicusDoe/shticker_book_unwritten
 WORKDIR /launcher
 RUN cargo build --release
 
-COPY config.json /launcher/config.json
-
-# copy launch script
+# copy files
 COPY ttr_launch.sh /launcher/ttr_launch.sh
 RUN chmod +x /launcher/ttr_launch.sh
-
-# copy supervisord config
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# cosmetic crap
+COPY config.json /launcher/config.json
+COPY startup.sh /launcher/startup.sh
+RUN chmod +x /launcher/startup.sh
 COPY openbox_config.sh /root/.config/openbox/autostart
 
-# set the Sillyzone root URL as an environment variable
-ENV SILLYZONE_ROOT_URL=${SILLYZONE_ROOT_URL}
+# setup pulseaudio
+RUN mkdir -p /root/.config/pulse && \
+    echo "load-module module-null-sink sink_name=@DEFAULT_SINK@" >> /root/.config/pulse/default.pa
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/launcher/startup.sh"]
 
-# VNC
-EXPOSE 5900
+# XPRA web interface and audio
+EXPOSE 10000
