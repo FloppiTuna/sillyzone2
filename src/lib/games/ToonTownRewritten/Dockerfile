@@ -37,11 +37,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # install xpra
 RUN curl https://xpra.org/get-xpra.sh | bash
 
-# install rust
+# install rust as root (will be accessible via PATH)
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# build shticker_book_unwritten
+# build shticker_book_unwritten as root
 RUN git clone https://github.com/JonathanHelianthicusDoe/shticker_book_unwritten.git /launcher
 WORKDIR /launcher
 RUN cargo build --release
@@ -52,11 +52,20 @@ RUN chmod +x /launcher/ttr_launch.sh
 COPY config.json /launcher/config.json
 COPY startup.sh /launcher/startup.sh
 RUN chmod +x /launcher/startup.sh
-COPY openbox_config.sh /root/.config/openbox/autostart
+# create non-root user for running xpra and pulseaudio
+RUN useradd -m -s /bin/bash sillyuser && \
+    echo "sillyuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# setup pulseaudio
-RUN mkdir -p /root/.config/pulse && \
-    echo "load-module module-null-sink sink_name=@DEFAULT_SINK@" >> /root/.config/pulse/default.pa
+# setup openbox config for sillyuser
+RUN mkdir -p /home/sillyuser/.config/openbox
+COPY openbox_config.sh /home/sillyuser/.config/openbox/autostart
+
+# change ownership of launcher directory to sillyuser
+RUN chown -R sillyuser:sillyuser /launcher /home/sillyuser
+
+# switch to non-root user
+USER sillyuser
+WORKDIR /launcher
 
 CMD ["/launcher/startup.sh"]
 

@@ -4,8 +4,9 @@
 xpra start :100 \
 	--bind-tcp=0.0.0.0:10000 \
 	--html=on \
-	--audio=yes \
-	--audio-source=default \
+	--pulseaudio=yes \
+	--speaker=on \
+	--microphone=off \
 	--exit-with-children=no \
 	--daemon=no \
 	--start-child=openbox \
