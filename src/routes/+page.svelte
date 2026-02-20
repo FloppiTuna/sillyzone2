@@ -8,6 +8,7 @@
     import { TrfLogon } from "$lib/apps/TrfLogon/TrfLogon";
     import { openWindows } from "$lib/stores/windowStore";
     import WindowRenderer from "$lib/components/WindowRenderer.svelte";
+    import { TrfShell } from "$lib/apps/TrfShell/TrfRuffle";
 
     const paneManager = usePM();
 
@@ -17,15 +18,17 @@
 
     appManager.registerApp('example', new ExampleApp());
     appManager.registerApp('login', new TrfLogon());
+    appManager.registerApp('shell', new TrfShell());
 
     // Start with the login app
     appManager.executeApp('login');
+    appManager.executeApp('shell'); // for testing
 
 </script>
 
 <div class="h-dvh w-dvw workspace">
     {#each $openWindows as window (window.id)}
-        <WindowRenderer {window} />
+        <WindowRenderer pane={window} />
     {/each}
 </div>
 

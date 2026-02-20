@@ -10,6 +10,7 @@ export interface OpenWindow {
   component: any; // The Svelte component to render
   props?: Record<string, any>;
   paneState?: any;
+  renderTitlebar?: boolean;
 }
 
 export const openWindows = writable<OpenWindow[]>([]);

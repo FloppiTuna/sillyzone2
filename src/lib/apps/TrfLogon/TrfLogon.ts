@@ -14,6 +14,7 @@ export class TrfLogon extends TruffleApplication {
         
         const loginWindow: OpenWindow = {
             id: 'login',
+            renderTitlebar: true,
             title: 'Welcome to the Glenn Quagmire',
             size: { width: 450, height: 180 },
             constrainToPortal: true,
