@@ -51,7 +51,8 @@ RUN chmod +x /launcher/ttr_launch.sh
 COPY config.json /launcher/config.json
 COPY startup.sh /launcher/startup.sh
 RUN chmod +x /launcher/startup.sh
-# create non-root user for running xpra and pulseaudio
+
+# create non-root user cuz root is scary and running toontown as root is just too powerful it would be unfair for the cogs
 RUN useradd -m -s /bin/bash sillyuser && \
     echo "sillyuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 

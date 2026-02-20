@@ -9,4 +9,5 @@ xpra start :100 \
 	--microphone=off \
 	--exit-with-children=no \
 	--daemon=no \
+	--start-child=openbox \
 	--start-child="xterm -e /launcher/ttr_launch.sh"
