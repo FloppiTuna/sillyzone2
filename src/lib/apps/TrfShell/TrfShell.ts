@@ -10,8 +10,9 @@ export class TrfShell extends TruffleApplication {
         this.renderWindow({
             id: 'taskbar',
             title: 'Truffle Taskbar',
-            size: { width: 100, height: 64 },
+            size: { width: "full", height: 32 },
             renderTitlebar: false,
+            useDefaultMargins: false,
             component: TaskbarWindow,
         });
     }

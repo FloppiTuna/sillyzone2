@@ -11,3 +11,9 @@
 <PanekitProvider>
 	{@render children()}
 </PanekitProvider>
+
+<style>
+	:global(body) {
+		overflow: hidden;
+	}
+</style>

@@ -4,13 +4,14 @@ import type { WindowDefinition } from '$lib/types/window';
 export interface OpenWindow {
   id: string;
   title: string;
-  size: { width: number; height: number };
+  size: { width: number | "full"; height: number | "full"  };
   constrainToPortal?: boolean;
   portalId?: string;
   component: any; // The Svelte component to render
   props?: Record<string, any>;
   paneState?: any;
   renderTitlebar?: boolean;
+  useDefaultMargins?: boolean // Whether to apply the default window-body class to the contents. This removes the default padding. TODO: is this wording weird?
 }
 
 export const openWindows = writable<OpenWindow[]>([]);

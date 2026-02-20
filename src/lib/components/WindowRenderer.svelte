@@ -1,14 +1,38 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { Pane, PaneState } from "panekit";
   import type { OpenWindow } from "$lib/stores/windowStore";
   import { removeWindow, getOpenWindows } from "$lib/stores/windowStore";
 
   export let pane: OpenWindow;
 
+  const initialWidth = pane.size.width === "full" ? 0 : pane.size.width;
+  const initialHeight = pane.size.height === "full" ? 0 : pane.size.height;
+
   let paneState = new PaneState({
-    size: pane.size,
+    size: {
+      width: initialWidth,
+      height: initialHeight,
+    },
     constrainToPortal: pane.constrainToPortal ?? true,
     portalId: pane.portalId ?? "main-panel",
+    canDrag: pane.renderTitlebar !== false, // todo: perhaps there should be a literal "can i drag this window" property or some way to provide a custom window component entirely? idk
+  });
+
+  onMount(() => {
+    if (pane.size.width === "full" || pane.size.height === "full") {
+      paneState = new PaneState({
+        size: {
+          width: pane.size.width === "full" ? window.innerWidth : pane.size.width,
+          height: pane.size.height === "full" ? window.innerHeight : pane.size.height,
+        },
+        constrainToPortal: pane.constrainToPortal ?? true,
+        portalId: pane.portalId ?? "main-panel",
+        canDrag: pane.renderTitlebar !== false,
+      });
+
+      pane.paneState = paneState;
+    }
   });
 
   pane.paneState = paneState;
@@ -42,7 +66,7 @@
     </Pane.Handle>
   {/if}
   <Pane.Content
-    class="window-body -w-full"
+    class={"-w-full" + (pane.useDefaultMargins === false ? "" : " window-body")}
     style="flex-direction: column; justify-content: space-between;"
   >
     <svelte:component this={pane.component} {...pane.props} />

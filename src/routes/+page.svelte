@@ -8,7 +8,7 @@
     import { TrfLogon } from "$lib/apps/TrfLogon/TrfLogon";
     import { openWindows } from "$lib/stores/windowStore";
     import WindowRenderer from "$lib/components/WindowRenderer.svelte";
-    import { TrfShell } from "$lib/apps/TrfShell/TrfRuffle";
+    import { TrfShell } from "$lib/apps/TrfShell/TrfShell";
 
     const paneManager = usePM();
 
