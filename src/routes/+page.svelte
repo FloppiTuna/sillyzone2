@@ -9,9 +9,11 @@
     import { openWindows } from "$lib/stores/windowStore";
     import WindowRenderer from "$lib/components/WindowRenderer.svelte";
     import { TrfShell } from "$lib/apps/TrfShell/TrfShell";
+    import { mount, unmount, getAllContexts, onMount, onDestroy } from 'svelte';
 
     const paneManager = usePM();
-
+    const ctx = getAllContexts();
+    
     const appManager = new AppManager({
         paneManager
     })
@@ -24,12 +26,50 @@
     appManager.executeApp('login');
     appManager.executeApp('shell'); // for testing
 
+    let portalTarget;
+    const windowInstances = new Map();
+    let unsub;
+
+    onMount(() => {
+        unsub = openWindows.subscribe(windows => {
+            if (!portalTarget) return;
+
+            const currentIds = new Set(windows.map(w => w.id));
+
+            // Remove windows that no longer exist
+            for (const [id, instance] of windowInstances) {
+                if (!currentIds.has(id)) {
+                    unmount(instance);
+                    windowInstances.delete(id);
+                }
+            }
+
+            // Add new windows
+            for (const win of windows) {
+                if (!windowInstances.has(win.id)) {
+                    const comp = mount(WindowRenderer, {
+                        target: portalTarget,
+                        props: { pane: win },
+                        context: ctx
+                    });
+                    windowInstances.set(win.id, comp);
+                }
+            }
+        });
+    });
+
+    onDestroy(() => {
+        unsub?.();
+        for (const instance of windowInstances.values()) {
+            unmount(instance);
+        }
+        windowInstances.clear();
+    });
 </script>
 
 <div class="h-dvh w-dvw workspace">
-    {#each $openWindows as window (window.id)}
-        <WindowRenderer pane={window} />
-    {/each}
+    <div bind:this={portalTarget} data-pane-portal-target="main-panel" class="h-full w-full portal-target">
+    </div>
 </div>
 
 <style>
@@ -37,6 +77,10 @@
         position: absolute;
         background-color: #008080;
         overflow: hidden;
+    }
+
+    .portal-target {
+        position: relative;
     }
 
     :global(.window-body) {

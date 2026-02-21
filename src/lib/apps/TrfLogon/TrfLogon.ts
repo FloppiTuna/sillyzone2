@@ -38,20 +38,14 @@ export class TrfLogon extends TruffleApplication {
                     return data.success;
                 },
                 beginLoading: async () => {
-                    this.closeWindow('login');
-
-                    this.renderWindow({
+                    this.swapWindow('login', {
                         id: 'loading',
                         title: 'Loading...',
                         size: { width: 350, height: 150 },
                         constrainToPortal: true,
                         portalId: 'main-panel',
                         component: LoadingWindow,
-                    })
-
-
-
-
+                    });
                 }
             }
         };

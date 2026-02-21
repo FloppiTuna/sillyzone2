@@ -1,5 +1,5 @@
 import type { OpenWindow } from "$lib/stores/windowStore";
-import { addWindow, removeWindow } from "$lib/stores/windowStore";
+import { addWindow, removeWindow, replaceWindow } from "$lib/stores/windowStore";
 
 export class TruffleApplication {
     protected name: string;
@@ -26,6 +26,11 @@ export class TruffleApplication {
 
     protected closeWindow(windowId: string) {
         removeWindow(windowId);
+    }
+
+    protected swapWindow(removeId: string, newWindow: OpenWindow) {
+        replaceWindow(removeId, newWindow);
+        return newWindow.id;
     }
 
     /**

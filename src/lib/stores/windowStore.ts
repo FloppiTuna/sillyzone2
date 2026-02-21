@@ -17,11 +17,32 @@ export interface OpenWindow {
 export const openWindows = writable<OpenWindow[]>([]);
 
 export function addWindow(window: OpenWindow) {
-  openWindows.update(windows => [...windows, window]);
+  openWindows.update(windows => {
+    const existingIndex = windows.findIndex(w => w.id === window.id);
+    if (existingIndex === -1) {
+      return [...windows, window];
+    }
+
+    const updated = [...windows];
+    updated[existingIndex] = window;
+    return updated;
+  });
 }
 
 export function removeWindow(windowId: string) {
   openWindows.update(windows => windows.filter(w => w.id !== windowId));
+}
+
+export function replaceWindow(removeId: string, newWindow: OpenWindow) {
+  openWindows.update(windows => {
+    const index = windows.findIndex(w => w.id === removeId);
+    if (index === -1) {
+      return [...windows, newWindow];
+    }
+    const updated = [...windows];
+    updated[index] = newWindow;
+    return updated;
+  });
 }
 
 export function clearWindows() {

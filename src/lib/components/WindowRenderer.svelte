@@ -21,17 +21,10 @@
 
   onMount(() => {
     if (pane.size.width === "full" || pane.size.height === "full") {
-      paneState = new PaneState({
-        size: {
-          width: pane.size.width === "full" ? window.innerWidth : pane.size.width,
-          height: pane.size.height === "full" ? window.innerHeight : pane.size.height,
-        },
-        constrainToPortal: pane.constrainToPortal ?? true,
-        portalId: pane.portalId ?? "main-panel",
-        canDrag: pane.renderTitlebar !== false,
-      });
-
-      pane.paneState = paneState;
+      paneState.size = {
+        width: pane.size.width === "full" ? window.innerWidth : pane.size.width,
+        height: pane.size.height === "full" ? window.innerHeight : pane.size.height,
+      };
     }
   });
 
