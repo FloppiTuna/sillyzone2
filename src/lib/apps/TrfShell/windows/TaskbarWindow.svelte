@@ -1,6 +1,6 @@
 <script lang="ts">
   import { sessionStore } from "$lib/stores/sessionStore";
-  import { getOpenWindows } from "$lib/stores/windowStore";
+  import { openWindows } from "$lib/stores/windowStore";
   import Smiley from "$lib/assets/start.png";
 
   const session = $sessionStore;
@@ -22,8 +22,6 @@
   }
   setInterval(updateTime, 1000);
 
-  const openWindows = getOpenWindows();
-
 </script>
 
 <div class="taskbar-root">
@@ -41,7 +39,7 @@
   </div>
 
   <div class="window-list">
-    {#each openWindows as window (window.id)}
+    {#each $openWindows as window (window.id)}
       <button>
         <span>{window.title}</span>
       </button>
