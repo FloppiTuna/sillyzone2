@@ -45,6 +45,15 @@ export class TrfLogon extends TruffleApplication {
                         constrainToPortal: true,
                         portalId: 'main-panel',
                         component: LoadingWindow,
+                        props: {
+                            beginLoading: () => {
+                                setTimeout(() => {
+                                    this.closeWindow('loading');
+                                }, 2000);
+
+
+                            }
+                        },
                     });
                 }
             }

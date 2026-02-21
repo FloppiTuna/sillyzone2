@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { PanekitProvider } from "panekit";
     import "panekit/index.css";
     import "98.css";
@@ -6,10 +6,11 @@
     import { AppManager } from "$lib/appManager";
     import { ExampleApp } from "$lib/apps/ExampleApp";
     import { TrfLogon } from "$lib/apps/TrfLogon/TrfLogon";
-    import { openWindows } from "$lib/stores/windowStore";
+    import { openWindows, type OpenWindow } from "$lib/stores/windowStore";
     import WindowRenderer from "$lib/components/WindowRenderer.svelte";
     import { TrfShell } from "$lib/apps/TrfShell/TrfShell";
     import { mount, unmount, getAllContexts, onMount, onDestroy } from 'svelte';
+    import type { Readable } from "node:stream";
 
     const paneManager = usePM();
     const ctx = getAllContexts();
@@ -26,7 +27,7 @@
     appManager.executeApp('login');
     appManager.executeApp('shell'); // for testing
 
-    let portalTarget;
+    let portalTarget: HTMLDivElement;
     const windowInstances = new Map();
     let unsub;
 

@@ -1,8 +1,11 @@
 <script lang="ts">
+  export let beginLoading: () => void;
+
   import { sessionStore } from "$lib/stores/sessionStore";
 
   const session = $sessionStore;
-  
+
+  beginLoading();
 </script>
 
 <div>
