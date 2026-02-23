@@ -53,6 +53,8 @@
                 "This will end your session. You will need to reload the page if you continue.",
               ) && removeWindow(pane.id);
             }
+
+            removeWindow(pane.id);
           }}
         ></button>
       </div>

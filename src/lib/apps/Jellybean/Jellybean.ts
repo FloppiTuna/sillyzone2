@@ -22,7 +22,7 @@ export class Jellybean extends TruffleApplication {
                         id: 'game-loader',
                         portalId: 'main-panel',
                         title: `Loading ${game}...`,
-                        size: { width: 275, height: 100 },
+                        size: { width: 275, height: 125 },
                         renderTitlebar: true,
                         component: JellybeanLoader,
                         props: {

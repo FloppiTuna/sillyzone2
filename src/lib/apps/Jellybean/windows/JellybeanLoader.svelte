@@ -3,7 +3,7 @@
 
     let progress = 0;
     let step = "Booting the container..."
-    setInterval(() => {
+    const loadBar = setInterval(() => {
         progress += 1;
         if (progress > 100) {
             progress = 0;
@@ -15,16 +15,21 @@
         method: 'POST'
     }).then(response => {
         if (!response.ok) {
+            clearInterval(loadBar);
+            response.json().then(data => {
+                step = data.error || `An unknown error occoured. ${response}`;
+            });
             throw new Error('Network response was not ok');
         }
         return response.json();
     }).then(data => {
         console.log('Server response:', data);
 
-        setInterval(() => {
+        const progressInterval = setInterval(() => {
             fetch(`/api/games/progress/${data.containerId}`)
                 .then(response => {
                     if (!response.ok) {
+                        clearInterval(progressInterval);
                         throw new Error('Network response was not ok');
                     }
                     return response.json();
@@ -44,11 +49,6 @@
                     console.error('There was a problem with the fetch operation:', error);
                 });
         }, 1000);
-
-
-
-
-
     }).catch(error => {
         console.error('There was a problem with the fetch operation:', error);
     });
@@ -60,6 +60,12 @@
     <p><b>Requesting ToonTown Rewritten...</b></p>
     <p><i>{step}</i></p>
     <div class="progress-indicator">
-        <span class="progress-indicator-bar" style="width: {progress}%"></span>
+        <span class="progress-indicator-bar" class:failed-to-load={true} style="width: {progress}%"></span>
     </div>
 </div>
+
+<style>
+    .failed-to-load {
+        background-color: firebrick;
+    }
+</style>
