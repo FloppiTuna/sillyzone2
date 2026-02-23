@@ -44,9 +44,11 @@ echo -e "\033[5mLaunching ToonTown Rewritten...\033[0m"
 sleep 2
 
 # pipe the password into the input when it asks for "Password for" and then run the launcher with the username and password
-/launcher/target/release/shticker_book_unwritten --config /launcher/config.json --username "$TOONTOWN_USERNAME" -d
+echo "It's go time!" > /tmp/game_progress.txt
+
+/launcher/target/release/shticker_book_unwritten --config /launcher/config.json --username "$TOONTOWN_USERNAME" 
 
 # Maximize the window after launching
 sleep 5
-echo "It's go time!" > /tmp/game_progress.txt
-wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+
+# wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz

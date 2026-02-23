@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+    export let showPlayer: () => void = () => {};
+
     let progress = 0;
     let step = "Booting the container..."
     setInterval(() => {
@@ -29,6 +31,14 @@
                 })
                 .then(data => {
                     step = data.status;
+
+                    if (data.status === "It's go time!" || data.status === "Prompting user for credentials...") {
+                        // game is ready or interaction is needed, show the player
+                        setTimeout(() => {
+                            showPlayer();
+                        }, 1500);
+                    }
+
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);

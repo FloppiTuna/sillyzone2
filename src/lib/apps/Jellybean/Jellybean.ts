@@ -1,5 +1,6 @@
 import { TruffleApplication } from "../TruffleApplication";
 import JellybeanLoader from "./windows/JellybeanLoader.svelte";
+import JellybeanPlayer from "./windows/JellybeanPlayer.svelte";
 import JellybeanSelector from "./windows/JellybeanSelector.svelte";
 
 export class Jellybean extends TruffleApplication {
@@ -24,6 +25,21 @@ export class Jellybean extends TruffleApplication {
                         size: { width: 275, height: 100 },
                         renderTitlebar: true,
                         component: JellybeanLoader,
+                        props: {
+                            showPlayer: () => {
+                                this.swapWindow('game-loader', {
+                                    id: 'game-player',
+                                    portalId: 'main-panel',
+                                    title: `ToonTown Rewritten`,
+                                    size: { width: 800, height: 600 },
+                                    renderTitlebar: true,
+                                    component: JellybeanPlayer,
+                                    props: {
+                                        game
+                                    }
+                                })
+                            }
+                        }
                     })
                 }
             }
