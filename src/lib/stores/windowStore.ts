@@ -37,6 +37,13 @@ export function replaceWindow(removeId: string, newWindow: OpenWindow) {
   openWindows.update(windows => {
     const index = windows.findIndex(w => w.id === removeId);
     if (index === -1) {
+      // removeId not found — use addWindow logic to avoid duplicates
+      const existingNewIndex = windows.findIndex(w => w.id === newWindow.id);
+      if (existingNewIndex !== -1) {
+        const updated = [...windows];
+        updated[existingNewIndex] = newWindow;
+        return updated;
+      }
       return [...windows, newWindow];
     }
     const updated = [...windows];

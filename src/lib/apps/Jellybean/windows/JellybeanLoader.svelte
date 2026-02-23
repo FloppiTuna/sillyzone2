@@ -3,6 +3,9 @@
 
     let progress = 0;
     let step = "Booting the container..."
+
+    let hasFailed = false;
+
     const loadBar = setInterval(() => {
         progress += 1;
         if (progress > 100) {
@@ -60,7 +63,7 @@
     <p><b>Requesting ToonTown Rewritten...</b></p>
     <p><i>{step}</i></p>
     <div class="progress-indicator">
-        <span class="progress-indicator-bar" class:failed-to-load={true} style="width: {progress}%"></span>
+        <span class="progress-indicator-bar" class:failed-to-load={hasFailed} style="width: {progress}%"></span>
     </div>
 </div>
 

@@ -1,4 +1,5 @@
 import { TruffleApplication } from "../TruffleApplication";
+import JellybeanHQBuddy from "./windows/JellybeanHQBuddy.svelte";
 import JellybeanLoader from "./windows/JellybeanLoader.svelte";
 import JellybeanPlayer from "./windows/JellybeanPlayer.svelte";
 import JellybeanSelector from "./windows/JellybeanSelector.svelte";
@@ -34,9 +35,14 @@ export class Jellybean extends TruffleApplication {
                                     size: { width: 800, height: 600 },
                                     renderTitlebar: true,
                                     component: JellybeanPlayer,
-                                    props: {
-                                        game
-                                    }
+                                })
+                                this.renderWindow({
+                                    id: 'hq-buddy',
+                                    portalId: 'main-panel',
+                                    title: `ToonHQ Buddy`,
+                                    size: { width: 215, height: 600 },
+                                    renderTitlebar: true,
+                                    component: JellybeanHQBuddy,
                                 })
                             }
                         }
