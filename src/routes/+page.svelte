@@ -10,22 +10,27 @@
     import WindowRenderer from "$lib/components/WindowRenderer.svelte";
     import { TrfShell } from "$lib/apps/TrfShell/TrfShell";
     import { mount, unmount, getAllContexts, onMount, onDestroy } from 'svelte';
-    import type { Readable } from "node:stream";
+    import { initAppManager, registerApp, executeApp } from "$lib/stores/appManagerStore";
+    import { VeeTerm } from "$lib/apps/Shelly/VeeTerm";
+    import { Jellybean } from "$lib/apps/Jellybean/Jellybean";
+
 
     const paneManager = usePM();
     const ctx = getAllContexts();
     
-    const appManager = new AppManager({
-        paneManager
-    })
+    // const appManager = new AppManager({
+    //     paneManager
+    // })
+    
+    initAppManager(paneManager);
 
-    appManager.registerApp('example', new ExampleApp());
-    appManager.registerApp('login', new TrfLogon());
-    appManager.registerApp('shell', new TrfShell());
+    registerApp('example', new ExampleApp());
+    registerApp('login', new TrfLogon());
+    registerApp('shell', new TrfShell());
+    registerApp('veeterm', new VeeTerm());
+    registerApp('jellybean', new Jellybean())
 
-    // Start with the login app
-    appManager.executeApp('login');
-    appManager.executeApp('shell'); // for testing
+    executeApp('login');
 
     let portalTarget: HTMLDivElement;
     const windowInstances = new Map();

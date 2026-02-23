@@ -3,7 +3,7 @@ FROM ubuntu:25.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 # sillyzone's root url
-ARG SILLYZONE_ROOT_URL=http://192.168.1.241:5173
+ARG SILLYZONE_ROOT_URL=http://192.168.1.240:5173
 ENV SILLYZONE_ROOT_URL=${SILLYZONE_ROOT_URL}
 
 # install deps
@@ -58,6 +58,9 @@ RUN useradd -m -s /bin/bash sillyuser && \
 
 # change ownership of launcher directory to sillyuser
 RUN chown -R sillyuser:sillyuser /launcher /home/sillyuser
+
+RUN touch /tmp/game_progress.txt
+RUN chown sillyuser:sillyuser /tmp/game_progress.txt
 
 # switch to non-root user
 USER sillyuser

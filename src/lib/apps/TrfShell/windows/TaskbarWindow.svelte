@@ -2,6 +2,7 @@
   import { sessionStore } from "$lib/stores/sessionStore";
   import { openWindows } from "$lib/stores/windowStore";
   import Smiley from "$lib/assets/start.png";
+    import { executeApp } from "$lib/stores/appManagerStore";
 
   const session = $sessionStore;
   console.log("Session in LoadingWindow:", session);
@@ -26,7 +27,9 @@
 
 <div class="taskbar-root">
   <div class="start-cluster">
-    <button class="start-button">
+    <button class="start-button" onclick={() => {
+      executeApp('veeterm');
+    }}>
       <img src={Smiley} alt="" />
       Start
     </button>

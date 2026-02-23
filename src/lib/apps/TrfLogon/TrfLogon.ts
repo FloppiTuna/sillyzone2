@@ -3,6 +3,7 @@ import LoginWindow from "./windows/LoginWindow.svelte";
 import type { OpenWindow } from "$lib/stores/windowStore";
 import LoadingWindow from "./windows/LoadingWindow.svelte";
 import { setSession } from "$lib/stores/sessionStore";
+import { executeApp } from "$lib/stores/appManagerStore";
 
 export class TrfLogon extends TruffleApplication {
     constructor() {
@@ -49,8 +50,8 @@ export class TrfLogon extends TruffleApplication {
                             beginLoading: () => {
                                 setTimeout(() => {
                                     this.closeWindow('loading');
+                                    executeApp('shell');
                                 }, 2000);
-
 
                             }
                         },
