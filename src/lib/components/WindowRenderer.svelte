@@ -12,7 +12,7 @@
   let paneState = new PaneState({
     size: {
       width: initialWidth,
-      height: initialHeight,
+      height: initialHeight + (pane.menuItems ? 20 : 0), // if there are menu items, we need to add some height to account for the menu bar
     },
     constrainToPortal: pane.constrainToPortal ?? true,
     portalId: pane.portalId ?? "main-panel",
@@ -23,7 +23,8 @@
     if (pane.size.width === "full" || pane.size.height === "full") {
       paneState.size = {
         width: pane.size.width === "full" ? window.innerWidth : pane.size.width,
-        height: pane.size.height === "full" ? window.innerHeight : pane.size.height,
+        height:
+          pane.size.height === "full" ? window.innerHeight : pane.size.height,
       };
     }
   });
@@ -60,6 +61,16 @@
       </div>
     </Pane.Handle>
   {/if}
+  {#if pane.menuItems}
+    <div class="menu-bar">
+      {#each pane.menuItems as item}
+        <div class="menu-bar-item" onclick={item.action}>
+          <button aria-label={item.label}><u>{item.label.charAt(0)}</u>{item.label.slice(1)}</button>
+        </div>
+      {/each}
+    </div>
+  {/if}
+
   <Pane.Content
     class={"-w-full" + (pane.useDefaultMargins === false ? "" : " window-body")}
     style="flex-direction: column; justify-content: space-between;"
@@ -67,7 +78,6 @@
     <svelte:component this={pane.component} {...pane.props} />
   </Pane.Content>
 </Pane.Root>
-
 
 <style>
   :global(.window-body) {

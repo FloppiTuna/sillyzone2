@@ -57,7 +57,18 @@ export class TrfLogon extends TruffleApplication {
                         },
                     });
                 }
-            }
+            },
+            menuItems: [
+                {
+                    label: "File",
+                    submenu: [
+                        { label: "New" },
+                        { label: "Open..." },
+                        { label: "Save" },
+                        { label: "Exit", action: () => this.closeWindow('login') }
+                    ]
+                }
+            ]
         };
         
         this.renderWindow(loginWindow);

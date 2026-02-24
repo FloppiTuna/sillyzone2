@@ -38,7 +38,7 @@
     <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #008080; color: white;">
         <iframe
             title="TTR Game Window"
-            src="/xpra/"
+            src="/xpra/?floating_menu=false"
             allow="autoplay; encrypted-media"
             allowfullscreen
             style="width: 100%; height: 100%; border: none;"

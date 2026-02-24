@@ -22,12 +22,20 @@
             response.json().then(data => {
                 step = data.error || `An unknown error occoured. ${response}`;
             });
+
+            // was it a 409? if so, we know the error is that the user already has a container running, so we can display a more specific message
+            if (response.status === 409) {
+                step = "Resuming...";
+                setTimeout(() => {
+                    showPlayer();
+                }, 1500);
+                return;
+            }
+
             throw new Error('Network response was not ok');
         }
         return response.json();
     }).then(data => {
-        console.log('Server response:', data);
-
         const progressInterval = setInterval(() => {
             fetch(`/api/games/progress/${data.containerId}`)
                 .then(response => {

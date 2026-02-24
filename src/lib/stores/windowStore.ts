@@ -1,6 +1,13 @@
 import { writable } from 'svelte/store';
 import type { WindowDefinition } from '$lib/types/window';
 
+export interface MenuItem {
+  label: string;
+  action?: () => void;
+  submenu?: MenuItem[];
+}
+
+
 export interface OpenWindow {
   id: string;
   title: string;
@@ -12,6 +19,7 @@ export interface OpenWindow {
   paneState?: any;
   renderTitlebar?: boolean;
   useDefaultMargins?: boolean // Whether to apply the default window-body class to the contents. This removes the default padding. TODO: is this wording weird?
+  menuItems?: MenuItem[];
 }
 
 export const openWindows = writable<OpenWindow[]>([]);

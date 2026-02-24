@@ -40,7 +40,7 @@ export class Jellybean extends TruffleApplication {
                                     id: 'hq-buddy',
                                     portalId: 'main-panel',
                                     title: `ToonHQ Buddy`,
-                                    size: { width: 215, height: 600 },
+                                    size: { width: 230, height: 600 },
                                     renderTitlebar: true,
                                     component: JellybeanHQBuddy,
                                 })

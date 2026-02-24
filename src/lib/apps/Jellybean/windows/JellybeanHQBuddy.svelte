@@ -2032,6 +2032,33 @@
         },
     ];
 
+    function evaluateGroupName(group: any) {
+        const type = group_types.filter(t => t.id === group.type)[0];
+        if (!type) return "Unknown Group? 0__0";
+
+        let name = type.name;
+
+        // handle options, which are described in groups as "options": { option_type: option_value, ... }
+        if (group.options && Object.keys(group.options).length > 0) {
+            // name = name + JSON.stringify(group.options);
+
+            Object.keys(group.options).forEach((optionType, index) => {
+                const optionValue = group.options[optionType];
+
+                console.log("Group has option", optionType, "equalling", optionValue);
+
+                const optionTypeName = group_types.filter(t => t.id === group.type)[0]?.options.filter((o: any) => o.id === parseInt(optionType))[0]?.name;
+                const optionValueName = group_types.filter(t => t.id === group.type)[0]?.options.filter((o: any) => o.id === parseInt(optionType))[0]?.values.filter((v: any) => v.option === parseInt(optionType) && v.id === optionValue)[0]?.name;
+                console.log("Option Type Name:", optionTypeName, "Option Value Name:", optionValueName);
+
+                name = optionValueName + " " + name;
+
+            })
+        }
+
+        return name;
+    }
+
     setInterval(async () => {
         try {
             const response = await fetch("/api/games/toonhq/groups");
@@ -2057,7 +2084,7 @@
                 {#if groups.length > 0}
                     {#each groups as group}
                         <tr class:unavailable-group={!group.boarding}>
-                            <td>{group_types.filter(t => t.id === group.type)[0]?.name ?? "Unknown Group?"}</td>
+                            <td>{evaluateGroupName(group)}</td>
                             <td>{group.members.length}/{group.max_players}</td>
                         </tr>
                     {/each}
@@ -2082,6 +2109,7 @@
 
 <style>
     .unavailable-group {
-        opacity: 0.5;
+        background-color: lightgray;
+        font-style: italic;
     }
 </style>
