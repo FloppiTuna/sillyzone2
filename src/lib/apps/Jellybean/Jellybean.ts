@@ -35,6 +35,15 @@ export class Jellybean extends TruffleApplication {
                                     size: { width: 800, height: 600 },
                                     renderTitlebar: true,
                                     component: JellybeanPlayer,
+                                    menuItems: [
+                                        {
+                                            label: "Game",
+                                            submenu: [
+                                                { label: "Reload" },
+                                                { label: "Exit", action: () => this.closeWindow('game-player') }
+                                            ]
+                                        }
+                                    ]
                                 })
                                 this.renderWindow({
                                     id: 'hq-buddy',

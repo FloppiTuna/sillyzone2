@@ -64,8 +64,16 @@
   {#if pane.menuItems}
     <div class="menu-bar">
       {#each pane.menuItems as item}
-        <div class="menu-bar-item" onclick={item.action}>
+        <div role="toolbar" tabindex="0" class="menu-bar-item" onclick={item.action} onkeydown={(e) => e.key === item.label.charAt(0) && item.action()}>
           <button aria-label={item.label}><u>{item.label.charAt(0)}</u>{item.label.slice(1)}</button>
+          <!-- todo: this doesnt support nested menus which might be neat later on x(( -->
+          {#if item.submenu}
+            <ul class="menu">
+              {#each item.submenu as subitem}
+                <li><u>{subitem.label.charAt(0)}</u>{subitem.label.slice(1)}</li>
+              {/each}
+            </ul>
+          {/if}
         </div>
       {/each}
     </div>

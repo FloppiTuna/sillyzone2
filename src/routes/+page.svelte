@@ -2,7 +2,8 @@
     import { PanekitProvider } from "panekit";
     import "panekit/index.css";
     import "98.css";
-    import "$lib/assets/98css-menus.css"
+    // import "$lib/assets/98css-menus.css"
+    import "$lib/assets/menusupport.css"
     import { usePM } from "panekit";
     import { AppManager } from "$lib/appManager";
     import { ExampleApp } from "$lib/apps/ExampleApp";
