@@ -4,7 +4,7 @@
   import type { OpenWindow } from "$lib/stores/windowStore";
   import { removeWindow, getOpenWindows } from "$lib/stores/windowStore";
 
-  export let pane: OpenWindow;
+  let { pane }: { pane: OpenWindow } = $props();
 
   const initialWidth = pane.size.width === "full" ? 0 : pane.size.width;
   const initialHeight = pane.size.height === "full" ? 0 : pane.size.height;
@@ -30,11 +30,12 @@
   });
 
   pane.paneState = paneState;
+  console.log(paneState.focused);
 </script>
 
 <Pane.Root {paneState} id="window-{pane.id}" class="window">
   {#if pane.renderTitlebar !== false}
-    <Pane.Handle class="flex title-bar">
+    <Pane.Handle class={"flex title-bar" + (paneState.focused ? "" : " inactive")} >
       <div class="title-bar-text">{pane.title}</div>
       <div class="title-bar-controls">
         <button aria-label="Minimize" onclick={() => paneState.minimize()}
@@ -83,7 +84,7 @@
     class={"-w-full" + (pane.useDefaultMargins === false ? "" : " window-body")}
     style="flex-direction: column; justify-content: space-between;"
   >
-    <svelte:component this={pane.component} {...pane.props} />
+    <pane.component {...pane.props} />
   </Pane.Content>
 </Pane.Root>
 

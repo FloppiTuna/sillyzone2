@@ -43,7 +43,14 @@
 
   <div class="window-list">
     {#each $openWindows as window (window.id)}
-      <button>
+      <button class="window-item" onclick={() => {
+        // if the window is already focused, minimize it. otherwise, focus it
+        if (window.paneState.focused) {
+          window.paneState.minimize();
+        } else {
+          window.paneState.focus();
+        }
+      }}>
         <span>{window.title}</span>
       </button>
     {/each}
@@ -57,6 +64,7 @@
   </div>
 </div>
 
+
 <style>
   .taskbar-root {
     height: 100%;
@@ -64,7 +72,6 @@
     align-items: center;
     margin-left: 4px;
     margin-right: 4px;
-    justify-content: space-between;
   }
 
   .start-cluster {
@@ -84,6 +91,16 @@
 
   .start-button img {
     height: 100%;
+  }
+
+  .window-list {
+    flex: 1;
+  }
+
+  .window-item {
+    min-width: none;
+    max-width: 200px;
+    width: auto;
   }
 
   .time-display {

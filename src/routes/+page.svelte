@@ -1,11 +1,10 @@
 <script lang="ts">
     import { PanekitProvider } from "panekit";
     import "panekit/index.css";
+    // todo: this is really stupid pls gang just merge the fuckin menu bar support
     import "98.css";
-    // import "$lib/assets/98css-menus.css"
     import "$lib/assets/menusupport.css"
     import { usePM } from "panekit";
-    import { AppManager } from "$lib/appManager";
     import { ExampleApp } from "$lib/apps/ExampleApp";
     import { TrfLogon } from "$lib/apps/TrfLogon/TrfLogon";
     import { openWindows, type OpenWindow } from "$lib/stores/windowStore";
