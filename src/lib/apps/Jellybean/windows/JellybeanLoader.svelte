@@ -14,6 +14,7 @@
     }, 10);
 
     // ask the server to spin up the docker container yay
+    let shouldCheck = true;
     fetch('/api/games/launch/ttr', {
         method: 'POST'
     }).then(response => {
@@ -25,6 +26,7 @@
 
             // was it a 409? if so, we know the error is that the user already has a container running, so we can display a more specific message
             if (response.status === 409) {
+                shouldCheck = false;
                 step = "Resuming...";
                 setTimeout(() => {
                     showPlayer();
@@ -36,6 +38,7 @@
         }
         return response.json();
     }).then(data => {
+        if (shouldCheck) return;
         const progressInterval = setInterval(() => {
             fetch(`/api/games/progress/${data.containerId}`)
                 .then(response => {
