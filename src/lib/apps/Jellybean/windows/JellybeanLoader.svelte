@@ -38,7 +38,7 @@
         }
         return response.json();
     }).then(data => {
-        if (shouldCheck) return;
+        if (!shouldCheck) return;
         const progressInterval = setInterval(() => {
             fetch(`/api/games/progress/${data.containerId}`)
                 .then(response => {

@@ -1,5 +1,6 @@
 import { TruffleApplication } from "../TruffleApplication";
 import JellybeanHQBuddy from "./windows/JellybeanHQBuddy.svelte";
+import JellybeanHQBuddyGroupInfo from "./windows/JellybeanHQBuddyGroupInfo.svelte";
 import JellybeanLoader from "./windows/JellybeanLoader.svelte";
 import JellybeanPlayer from "./windows/JellybeanPlayer.svelte";
 import JellybeanSelector from "./windows/JellybeanSelector.svelte";
@@ -52,6 +53,19 @@ export class Jellybean extends TruffleApplication {
                                     size: { width: 230, height: 600 },
                                     renderTitlebar: true,
                                     component: JellybeanHQBuddy,
+                                    props: {
+                                        openGroupDetails: (group: any) => this.renderWindow({
+                                            id: 'group-details',
+                                            portalId: 'main-panel',
+                                            title: `ToonHQ ~ Group Details`,
+                                            size: { width: 400, height: 300 },
+                                            renderTitlebar: true,
+                                            component: JellybeanHQBuddyGroupInfo,
+                                            props: {
+                                                group
+                                            }
+                                        })
+                                    }
                                 })
                             }
                         }
