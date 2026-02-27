@@ -30,11 +30,13 @@ export class TrfLogon extends TruffleApplication {
                     });
                     const data = await response.json();
 
-                    setSession(
-                        "WIP",
-                        "WIP",
-                        "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-                    )
+                    if (data.success) {
+                        setSession(
+                            data.username,
+                            data.username,
+                            "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                        );
+                    }
 
                     return data.success;
                 },

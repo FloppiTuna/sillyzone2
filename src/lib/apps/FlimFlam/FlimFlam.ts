@@ -10,7 +10,7 @@ export class FlimFlam extends TruffleApplication {
         this.renderWindow({
             id: 'flimflam-main',
             portalId: 'main-panel',
-            title: 'FlimFlam - Main Menu',
+            title: 'FlimFlam - Loading',
             size: { width: 500, height: 160 },
             constrainToPortal: true,
             renderTitlebar: true,

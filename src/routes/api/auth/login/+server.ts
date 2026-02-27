@@ -1,17 +1,16 @@
 import redis from '$lib/server/redis';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
+
+const SESSION_TTL = 60 * 60 // 1 hour
 
 function sha256Hash(input: string): string {
-  // Create a hash object using the 'sha256' algorithm
   return createHash('sha256')
-    // Update the hash with the input data
     .update(input)
-    // Generate the digest in hexadecimal format
     .digest('hex'); 
 }
 
 
-export async function POST({ request }) {
+export async function POST({ request, cookies }) {
     const { username, password } = await request.json();
 
     // validate input
@@ -25,36 +24,37 @@ export async function POST({ request }) {
     // check if username exists in redis
     const user = await redis.hGetAll(`user:${username}`);
 
-    if (!user) {
+    if (!user || !user.password) {
         return new Response(JSON.stringify({ success: false, message: 'Invalid username or password' }), {
             headers: { 'Content-Type': 'application/json' },
             status: 401
         });
     }
-
-    // get password from request body
-    const inputPassword = password;
 
     // compare with password in redis
-    if (sha256Hash(inputPassword) !== user.password) {
-        console.debug('Password mismatch:', {
-            inputHash: sha256Hash(inputPassword),
-            storedHash: user.password
-        });
-
+    if (sha256Hash(password) !== user.password) {
         return new Response(JSON.stringify({ success: false, message: 'Invalid username or password' }), {
             headers: { 'Content-Type': 'application/json' },
             status: 401
         });
     }
 
-    console.debug('User authenticated successfully:', { username });
+    // create session
+    const sessionToken = randomBytes(32).toString('hex');
+    const sessionData = JSON.stringify({ username });
 
-    
+    await redis.set(`session:${sessionToken}`, sessionData, { EX: SESSION_TTL });
 
+    // set httponly cookie
+    cookies.set('session', sessionToken, {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: true,
+        maxAge: SESSION_TTL
+    });
 
-
-    return new Response(JSON.stringify({ success: true, message: 'Login successful' }), {
+    return new Response(JSON.stringify({ success: true, message: 'Login successful', username }), {
         headers: { 'Content-Type': 'application/json' }
     });
 }

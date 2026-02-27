@@ -1,9 +1,12 @@
 import { execAsync } from "$lib/server/exec";
 
-export async function POST({ params }) {
-    const { game } = params;
+export async function POST({ params, locals }) {
+    if (!locals.session) {
+        return new Response(JSON.stringify({ success: false, error: 'Not authenticated' }), { status: 401 });
+    }
 
-    const user = "arsenic"; // TODO: get this from the session or something instead of hardcoding it!!
+    const { game } = params;
+    const user = locals.session.username;
 
     // before we begin let's check that the image is valid and exists
     try {
@@ -31,7 +34,7 @@ export async function POST({ params }) {
 
 
     try {
-        const { stdout } = await execAsync(`docker run -p 10000:10000 -e SILLYZONE_USERNAME="arsenic" --name ${user}-${game}-instance --platform linux/amd64 --rm -d ttr-runner:latest`);
+        const { stdout } = await execAsync(`docker run -p 10000:10000 -e SILLYZONE_USERNAME="${user}" --name ${user}-${game}-instance --platform linux/amd64 --rm -d ttr-runner:latest`);
         const containerId = stdout.trim();
         console.log(`Container launched successfully! ID: ${containerId}`);
         return new Response(JSON.stringify({ success: true, containerId }), { status: 200 });

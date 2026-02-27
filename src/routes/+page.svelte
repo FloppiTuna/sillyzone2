@@ -10,12 +10,14 @@
     import { openWindows, type OpenWindow } from "$lib/stores/windowStore";
     import WindowRenderer from "$lib/components/WindowRenderer.svelte";
     import { TrfShell } from "$lib/apps/TrfShell/TrfShell";
-    import { getAllContexts } from 'svelte';
+    import { getAllContexts, onMount } from 'svelte';
     import { initAppManager, registerApp, executeApp } from "$lib/stores/appManagerStore";
     import { VeeTerm } from "$lib/apps/Shelly/VeeTerm";
     import { Jellybean } from "$lib/apps/Jellybean/Jellybean";
     import { FlimFlam } from "$lib/apps/FlimFlam/FlimFlam";
+    import { setSession } from "$lib/stores/sessionStore";
 
+    let { data } = $props();
 
     const paneManager = usePM();
     const ctx = getAllContexts();
@@ -29,8 +31,18 @@
     registerApp('jellybean', new Jellybean())
     registerApp('flimflam', new FlimFlam())
 
-
-    executeApp('login');
+    onMount(() => {
+        if (data.session) {
+            setSession(
+                data.session.username,
+                data.session.username,
+                "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+            );
+            executeApp('shell');
+        } else {
+            executeApp('login');
+        }
+    });
 </script>
 
 <div class="h-dvh w-dvw workspace">
