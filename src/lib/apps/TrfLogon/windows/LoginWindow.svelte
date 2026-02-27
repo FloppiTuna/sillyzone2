@@ -30,10 +30,10 @@
 </script>
 
 <div>
-  <div class="flex items-center justify-center" style="height: 64px; width:100%; min-width: 0; box-sizing: border-box; background-color: black; text-align: center; color: white; font-size: 24px; font-weight: bold;">
-    <p>paleportal <i>deluxe</i></p>
+  <div class="flex items-center justify-center" style="display: flex; flex-direction: column; height: 64px; width:100%; min-width: 0; box-sizing: border-box; background-color: black; text-align: center; color: white; font-size: 24px; font-weight: bold;">
+    <p>sillyzone <i>2</i></p>
   </div>
-  <p><b>This application requires you to log in. Unauthorized access is prohibited.</b></p>
+  <p><b>Welcome! Please sign in with your username and password. If you don't have one of those, you probably aren't supposed to be here.</b></p>
 
   {#if errorMessage}
     <div style="color: red; margin-top: 8px; text-align: center;">
