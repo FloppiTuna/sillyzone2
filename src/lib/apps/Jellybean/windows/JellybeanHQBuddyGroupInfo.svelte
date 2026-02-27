@@ -27,7 +27,7 @@
                 {#each group.members as member}
                     <tr>
                         <td>{member.toon.name}</td>
-                        <td><marquee scrollamount="4" >{evaluateGags(member.toon)}</marquee></td>
+                        <td>{evaluateGags(member.toon)}</td>
                         <td>{member.toon.laff}</td>
                     </tr>
                 {/each}

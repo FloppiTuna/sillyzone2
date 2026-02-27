@@ -14,6 +14,7 @@
     import { initAppManager, registerApp, executeApp } from "$lib/stores/appManagerStore";
     import { VeeTerm } from "$lib/apps/Shelly/VeeTerm";
     import { Jellybean } from "$lib/apps/Jellybean/Jellybean";
+    import { FlimFlam } from "$lib/apps/FlimFlam/FlimFlam";
 
 
     const paneManager = usePM();
@@ -26,6 +27,8 @@
     registerApp('shell', new TrfShell());
     registerApp('veeterm', new VeeTerm());
     registerApp('jellybean', new Jellybean())
+    registerApp('flimflam', new FlimFlam())
+
 
     executeApp('login');
 </script>

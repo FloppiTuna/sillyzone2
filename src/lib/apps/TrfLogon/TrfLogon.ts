@@ -51,7 +51,7 @@ export class TrfLogon extends TruffleApplication {
                                 setTimeout(() => {
                                     this.closeWindow('loading');
                                     executeApp('shell');
-                                }, 2000);
+                                }, 100);
 
                             }
                         },
