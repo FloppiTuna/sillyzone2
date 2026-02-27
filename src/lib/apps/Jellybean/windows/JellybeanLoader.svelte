@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let showPlayer: () => void = () => {};
+    export let showPlayer: (hostPort: number) => void = () => {};
 
     let progress = 0;
     let step = "Booting the container..."
@@ -20,25 +20,29 @@
     }).then(response => {
         if (!response.ok) {
             clearInterval(loadBar);
-            response.json().then(data => {
-                step = data.error || `An unknown error occoured. ${response}`;
-            });
 
             // was it a 409? if so, we know the error is that the user already has a container running, so we can display a more specific message
             if (response.status === 409) {
                 shouldCheck = false;
                 step = "Resuming...";
-                setTimeout(() => {
-                    showPlayer();
-                }, 1500);
+                response.json().then(data => {
+                    setTimeout(() => {
+                        showPlayer(data.hostPort);
+                    }, 1500);
+                });
                 return;
             }
+
+            response.json().then(data => {
+                step = data.error || `An unknown error occoured. ${response}`;
+            });
 
             throw new Error('Network response was not ok');
         }
         return response.json();
     }).then(data => {
         if (!shouldCheck) return;
+        const hostPort = data.hostPort;
         const progressInterval = setInterval(() => {
             fetch(`/api/games/progress/${data.containerId}`)
                 .then(response => {
@@ -54,7 +58,7 @@
                     if (data.status === "It's go time!" || data.status === "Prompting user for credentials...") {
                         // game is ready or interaction is needed, show the player
                         setTimeout(() => {
-                            showPlayer();
+                            showPlayer(hostPort);
                         }, 1500);
                     }
 

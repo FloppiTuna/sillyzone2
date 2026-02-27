@@ -28,7 +28,7 @@ export class Jellybean extends TruffleApplication {
                         renderTitlebar: true,
                         component: JellybeanLoader,
                         props: {
-                            showPlayer: () => {
+                            showPlayer: (hostPort: number) => {
                                 this.swapWindow('game-loader', {
                                     id: 'game-player',
                                     portalId: 'main-panel',
@@ -36,6 +36,9 @@ export class Jellybean extends TruffleApplication {
                                     size: { width: 800, height: 600 },
                                     renderTitlebar: true,
                                     component: JellybeanPlayer,
+                                    props: {
+                                        hostPort
+                                    },
                                     menuItems: [
                                         {
                                             label: "Game",

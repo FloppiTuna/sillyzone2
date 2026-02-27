@@ -36,6 +36,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # install xpra
 RUN curl https://xpra.org/get-xpra.sh | bash
 
+# patch xpra to allow iframing from other origins
+RUN sed -i "s/frame-ancestors 'self'/frame-ancestors */g" /etc/xpra/http-headers/10_content_security_policy.txt
+
 # install rust as root (will be accessible via PATH)
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
