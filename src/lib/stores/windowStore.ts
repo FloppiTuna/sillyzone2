@@ -20,6 +20,7 @@ export interface OpenWindow {
   renderTitlebar?: boolean;
   useDefaultMargins?: boolean // Whether to apply the default window-body class to the contents. This removes the default padding. TODO: is this wording weird?
   menuItems?: MenuItem[];
+  isHidden?: boolean;
 }
 
 export const openWindows = writable<OpenWindow[]>([]);
@@ -56,6 +57,26 @@ export function replaceWindow(removeId: string, newWindow: OpenWindow) {
     }
     const updated = [...windows];
     updated[index] = newWindow;
+    return updated;
+  });
+}
+
+export function minimizeWindow(windowId: string) {
+  openWindows.update(windows => {
+    const index = windows.findIndex(w => w.id === windowId);
+    if (index === -1) return windows;
+    const updated = [...windows];
+    updated[index] = { ...updated[index], isHidden: true };
+    return updated;
+  });
+}
+
+export function restoreWindow(windowId: string) {
+  openWindows.update(windows => {
+    const index = windows.findIndex(w => w.id === windowId);
+    if (index === -1) return windows;
+    const updated = [...windows];
+    updated[index] = { ...updated[index], isHidden: false };
     return updated;
   });
 }

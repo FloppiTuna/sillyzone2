@@ -1,8 +1,8 @@
 <script lang="ts">
   import { sessionStore } from "$lib/stores/sessionStore";
-  import { openWindows } from "$lib/stores/windowStore";
+  import { minimizeWindow, openWindows } from "$lib/stores/windowStore";
   import Smiley from "$lib/assets/start.png";
-    import { executeApp } from "$lib/stores/appManagerStore";
+  import { executeApp } from "$lib/stores/appManagerStore";
 
   const session = $sessionStore;
   console.log("Session in LoadingWindow:", session);
@@ -43,16 +43,20 @@
 
   <div class="window-list">
     {#each $openWindows as window (window.id)}
-      <button class="window-item" onclick={() => {
-        // if the window is already focused, minimize it. otherwise, focus it
-        if (window.paneState.focused) {
-          window.paneState.minimize();
-        } else {
-          window.paneState.focus();
-        }
-      }}>
-        <span>{window.title}</span>
-      </button>
+      {#if window.id === "taskbar"}
+        <!-- don't render a window item for the taskbar window..that's strange...but heh i guess ive seen stranger things....AHAHAHAH -->
+      {:else}
+        <button class="window-item" onclick={() => {
+          // if the window is already focused, minimize it. otherwise, focus it
+          if (window.paneState?.focused) {
+            minimizeWindow(window.id);
+          } else {
+            window.paneState?.focus();
+          }
+        }}>
+          <span>{window.title}</span>
+        </button>
+      {/if}
     {/each}
   </div>
 

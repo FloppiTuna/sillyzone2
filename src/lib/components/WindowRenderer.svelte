@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { Pane, PaneState } from "panekit";
   import type { OpenWindow } from "$lib/stores/windowStore";
-  import { removeWindow, getOpenWindows } from "$lib/stores/windowStore";
+  import { removeWindow, getOpenWindows, minimizeWindow, restoreWindow } from "$lib/stores/windowStore";
 
   let { pane }: { pane: OpenWindow } = $props();
 
@@ -27,18 +27,24 @@
           pane.size.height === "full" ? window.innerHeight : pane.size.height,
       };
     }
+    paneState.focus();
   });
 
   pane.paneState = paneState;
   console.log(paneState.focused);
 </script>
 
+<!-- rudimentary minimize system -->
+
+{#if pane.isHidden}
+  <!-- render nothing until the window is restored -->
+{:else}
 <Pane.Root {paneState} id="window-{pane.id}" class="window">
   {#if pane.renderTitlebar !== false}
     <Pane.Handle class={"flex title-bar" + (paneState.focused ? "" : " inactive")} >
       <div class="title-bar-text">{pane.title}</div>
       <div class="title-bar-controls">
-        <button aria-label="Minimize" onclick={() => paneState.minimize()}
+        <button aria-label="Minimize" onclick={() => minimizeWindow(pane.id)}
         ></button>
         <!-- this doesnt do anything lol -->
         <button aria-label="Maximize" onclick={() => paneState.maximize()}
@@ -87,6 +93,7 @@
     <pane.component {...pane.props} />
   </Pane.Content>
 </Pane.Root>
+{/if}
 
 <style>
   :global(.window-body) {

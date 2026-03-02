@@ -1,5 +1,6 @@
 <script lang="ts">
   import { executeApp, getAllApps, getAppByName } from "$lib/stores/appManagerStore";
+    import { showBasicAlert } from "$lib/utils/dialogHelper";
 
   type Message = {
     type : 'input' | 'output';
@@ -17,6 +18,8 @@
     { type: 'output', text: 'Welcome to VeeTerm!' },
     { type: 'output', text: 'Type "help" for a list of commands.' }
   ])
+
+  let isReady = $state(true);
 
   function print(side: 'input' | 'output', text: string) {
     messages.push({ type: side, text, timestamp: new Date() });
@@ -77,6 +80,18 @@
         
       }
     },
+    alert: {
+      description: 'Shows an alert with the specified message.',
+      usage: 'alert <title> <message>',
+      execute: async (args: string[]) => {
+        if (args.length < 2) {
+          print('output', 'Usage: alert <title> <message>');
+          return;
+        }
+        const answer = await showBasicAlert(args[0], args.slice(1).join(' '), ["WRONG!", "Gas leak", "Drop tables"]);
+        print('output', `Alert closed: ${answer}`);
+      }
+    },
     DEFAULT: {
       description: 'Default command for unknown inputs.',
       usage: '<command>',
@@ -96,9 +111,11 @@
 
 
 
-  function handleInput(event: KeyboardEvent) {
+  async function handleInput(event: KeyboardEvent) {
     if (event.key === 'Enter') {
+      isReady = false;
       const input = (event.target as HTMLInputElement).value;
+
       print('input', input);
       (event.target as HTMLInputElement).value = '';
 
@@ -106,10 +123,11 @@
       const command = args[0].toLowerCase();
 
       if (commands[command]) {
-        commands[command].execute(args.slice(1));
+        await commands[command].execute(args.slice(1));
       } else {
-        commands.DEFAULT.execute(args);
+        await commands.DEFAULT.execute(args);
       }
+      isReady = true; 
     }
   }
 
@@ -125,7 +143,7 @@
   {/each}
 </div>
 <div class="terminal-input">
-  <input type="text" onkeydown={handleInput} />
+  <input type="text" onkeydown={handleInput} disabled={!isReady} placeholder={isReady ? "Type a command..." : "Terminal is busy..."} />
 </div>
 
 
