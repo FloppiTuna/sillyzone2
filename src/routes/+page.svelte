@@ -64,7 +64,7 @@
 <style>
     .workspace {
         position: absolute;
-        background-color: #008080;
+        background-color: #330030;
         overflow: hidden;
     }
 
