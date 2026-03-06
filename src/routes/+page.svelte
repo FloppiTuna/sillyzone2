@@ -29,6 +29,8 @@
 
     initAppManager(paneManager);
 
+    // only load apps when they are used
+    
     registerApp("example", new ExampleApp());
     registerApp("login", new TrfLogon());
     registerApp("shell", new TrfShell());

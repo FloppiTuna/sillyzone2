@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import type { WindowDefinition } from '$lib/types/window';
+import { processes } from './appManagerStore';
 
 export interface MenuItem {
   label: string;
@@ -40,6 +41,9 @@ export function addWindow(window: OpenWindow) {
 
 export function removeWindow(windowId: string) {
   openWindows.update(windows => windows.filter(w => w.id !== windowId));
+
+  // do any windows belonging to this particular PID exist anymore? if not we can remove it and begin it's cleanup process
+  // TODO: allow this to be overridden?
 }
 
 export function replaceWindow(removeId: string, newWindow: OpenWindow) {
@@ -83,6 +87,21 @@ export function restoreWindow(windowId: string) {
 
 export function clearWindows() {
   openWindows.set([]);
+}
+
+export function closeWindowsByPid(pid: number) {
+    let appId: string | undefined;
+    processes.update(procs => {
+        appId = procs.get(pid);
+        return procs;
+    });
+
+    if (!appId) {
+        console.warn(`No process found with PID ${pid}`);
+        return;
+    }
+
+    openWindows.update(windows => windows.filter(w => w.portalId !== appId));
 }
 
 export function getOpenWindows() {

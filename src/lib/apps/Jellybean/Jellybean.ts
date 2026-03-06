@@ -7,7 +7,7 @@ import JellybeanSelector from "./windows/JellybeanSelector.svelte";
 
 export class Jellybean extends TruffleApplication {
     constructor() {
-        super("Jellybean", "Play ToonTown Rewritten over ");
+        super("Jellybean", "Play ToonTown Rewritten on sillyzone!");
     }
 
     run() {

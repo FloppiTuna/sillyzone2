@@ -34,6 +34,13 @@ export class TruffleApplication {
     }
 
     /**
+     * Runs before the application is closed, allowing for cleanup of any resources or windows.
+     */
+    cleanup() {
+        // To be implemented by subclasses
+    }
+
+    /**
      * Begin execution of the application.
      */
     run() {

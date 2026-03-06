@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { executeApp, getAllApps, getAppByName } from "$lib/stores/appManagerStore";
+  import { closeApp, executeApp, getAllApps, getAllProcesses, getAppByName } from "$lib/stores/appManagerStore";
     import { showBasicAlert } from "$lib/utils/dialogHelper";
 
   type Message = {
@@ -90,6 +90,34 @@
         }
         const answer = await showBasicAlert(args[0], args.slice(1).join(' '), ["WRONG!", "Gas leak", "Drop tables"]);
         print('output', `Alert closed: ${answer}`);
+      }
+    },
+    ps: {
+      description: "Show all running processes.",
+      usage: "ps",
+      execute: async () => {
+        const procs = getAllProcesses();
+        for (const [pid, appId] of procs) {
+          print('output', `PID: ${pid}, App ID: ${appId}`);
+        }
+      }
+    },
+    kill: {
+      description: "Kill a process by PID.",
+      usage: "kill <pid>",
+      execute: async (args: string[]) => {
+        if (args.length < 1) {
+          print('output', 'Usage: kill <pid>');
+          return;
+        }
+        const pid = parseInt(args[0]);
+        if (isNaN(pid)) {
+          print('output', 'input must be a valid PID.');
+          return;
+        }
+
+        closeApp(pid);
+        print('output', `Sent kill signal to PID ${pid}`);
       }
     },
     DEFAULT: {
